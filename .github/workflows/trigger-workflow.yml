@@ -2,6 +2,8 @@ name: Trigger Target Workflow
 
 on:
   push:
+    branches: ['develop']
+      paths: ['doc/man1', 'doc/man7']
 
 jobs:
   trigger:
