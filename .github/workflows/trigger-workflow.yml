@@ -14,6 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          path: timewarrior
+
       - name: Trigger Workflow in Another Repository
         run: |
           # Set the required variables
@@ -24,7 +31,7 @@ jobs:
           version="v0.0.3"
 
           # Get the list of changed files
-          changed_files=$(git diff --name-only HEAD~1)
+          changed_files=$(git -C timewarrior diff --name-only HEAD~1)
 
           curl -L \
             -X POST \
