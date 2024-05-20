@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Print Commit History
+        run: |
+          git -C $GITHUB_WORKSPACE log --oneline
+
       - name: Trigger Workflow in Another Repository
         run: |
           # Set the required variables
