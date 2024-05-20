@@ -14,9 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print Commit History
-        run: |
-          git -C $GITHUB_WORKSPACE log --oneline
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: Trigger Workflow in Another Repository
         run: |
@@ -28,7 +29,7 @@ jobs:
           version="v0.0.3"
 
           # Get the list of changed files
-          changed_files=$(git -C $GITHUB_WORKSPACE diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          changed_files=$(git -C $GITHUB_WORKSPACE diff --name-only HEAD~1)
 
           curl -L \
             -X POST \
