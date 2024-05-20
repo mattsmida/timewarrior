@@ -24,7 +24,7 @@ jobs:
           version="v0.0.3"
 
           # Get the list of changed files
-          changed_files="echo ${{ git diff --name-only HEAD~1 }}"
+          changed_files=$(git diff --name-only HEAD~1)
 
           curl -L \
             -X POST \
