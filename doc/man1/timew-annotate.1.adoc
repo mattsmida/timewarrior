@@ -1,4 +1,4 @@
-~~ Change to this file around 18:06 MT to trigger workflow ~~
+~~ Change to this file around 16:01 MT to trigger workflow ~~
 = timew-annotate(1)
 
 == NAME
