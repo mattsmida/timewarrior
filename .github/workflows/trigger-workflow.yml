@@ -39,7 +39,7 @@ jobs:
           # Convert the array to JSON
           file_contents_json=$(printf "%s" "${file_contents[@]}")
 
-          curl -L \
+          echo curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.PAT }}" \
