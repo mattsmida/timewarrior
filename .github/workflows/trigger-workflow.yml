@@ -51,7 +51,7 @@ jobs:
           formatted_encoded_file_contents="[${base64_encoded_files[@]}]"
 
           # Update the curl command with the formatted changed_filenames and encoded_file_contents
-          curl -L \
+          echo curl -L \
               -X POST \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.PAT }}" \
