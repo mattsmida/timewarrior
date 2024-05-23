@@ -1,4 +1,4 @@
-~~ Change to this file around 14:19 MT to trigger workflow ~~
+.~~ Change to this file to trigger workflow ~~
 = timew-cancel(1)
 
 == NAME
