@@ -20,38 +20,24 @@ jobs:
 
       - name: Trigger Workflow in Another Repository
         run: |
-          # Set the required variables
           repo_owner="mattsmida"
           repo_name="ti.net"
           event_type="trigger-workflow"
           service="the-push-service"
           version="v0.0.3"
 
-          # Get the list of changed filenames
           changed_filenames=$(git -C $GITHUB_WORKSPACE diff --name-only HEAD~1)
 
-          formatted_changed_filenames="[$(echo "$changed_filenames" | sed 's/$/,/' | tr -d '\n' | sed 's/,$//')]"
-
-          # Initialize an empty array to store base64 encoded file contents
           base64_encoded_files=()
-
-          # Loop through each changed file, base64 encode it, append to array
           while IFS= read -r filename; do
               base64_encoded_file=$(base64 "$filename" | tr -d '\n')
-              base64_encoded_files+=("$base64_encoded_file")
+              base64_encoded_files+=("\"$base64_encoded_file\"")
           done <<< "$changed_filenames"
 
-          # Join the base64 encoded file contents with a comma
-          encoded_file_contents=$(IFS=","; echo "${base64_encoded_files[*]}")
-
-          # Construct the changed_filenames as an array-like list with filenames surrounded by single quotes
           formatted_changed_filenames="[\"$(echo "$changed_filenames" | sed "s/.*/'&'/")\"]"
+          formatted_encoded_file_contents="[${base64_encoded_files[*]}]"
 
-          # Construct the encoded_file_contents as an array-like list of quoted base64 encoded file contents
-          formatted_encoded_file_contents="[${base64_encoded_files[@]}]"
-
-          # Update the curl command with the formatted changed_filenames and encoded_file_contents
-          echo curl -L \
+          curl -L \
               -X POST \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.PAT }}" \
