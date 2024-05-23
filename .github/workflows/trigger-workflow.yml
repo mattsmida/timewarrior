@@ -38,7 +38,9 @@ jobs:
           done <<< "$changed_filenames"
 
           # Format encoded_file_contents with quotes and commas
-          formatted_encoded_file_contents="[ $(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done | sed 's/,$//') ]"
+          formatted_encoded_file_contents="[ $(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done) ]"
+
+          formatted_encoded_file_contents=$(echo $formatted_encoded_file_contents) | sed 's/,$//')
 
           echo curl -L \
               -X POST \
