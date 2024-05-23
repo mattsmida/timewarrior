@@ -31,11 +31,9 @@ jobs:
           changed_filenames=$(git -C $GITHUB_WORKSPACE diff --name-only HEAD~1)
 
           # Base64 encode the changed files to send
-          encoded_file_contents=$(base64 $changed_filenames)
+          encoded_file_contents=$(base64 $changed_filenames | tr -d \'n')
 
-          echo $encoded_file_contents
-
-          echo curl -L \
+          curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.PAT }}" \
