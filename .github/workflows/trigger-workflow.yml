@@ -29,7 +29,7 @@ jobs:
           changed_filenames=$(git -C $GITHUB_WORKSPACE diff --name-only HEAD~1)
 
           # Format changed_filenames with single quotes and commas
-          formatted_changed_filenames="[ $(echo "$changed_filenames" | sed "s/.*/'&',/; s/,$/ /") ]"
+          formatted_changed_filenames="[ $(echo "$changed_filenames" | sed "s/.*/'&',/g; s/,$//") ]"
 
           base64_encoded_files=()
           while IFS= read -r filename; do
@@ -37,7 +37,8 @@ jobs:
               base64_encoded_files+=("\"$base64_encoded_file\"")
           done <<< "$changed_filenames"
 
-          formatted_encoded_file_contents="[ $(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done | sed 's/,$/ /') ]"
+          # Format encoded_file_contents with quotes and commas
+          formatted_encoded_file_contents="[ $(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done | sed 's/,$//') ]"
 
           echo curl -L \
               -X POST \
