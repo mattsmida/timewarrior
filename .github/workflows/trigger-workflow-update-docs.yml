@@ -21,7 +21,7 @@ jobs:
           doc_filenames=$(find doc/man1 doc/man7 -type f)
 
           # Format doc_filenames with single quotes and commas
-          doc_filenames="[ $(echo $doc_files | sed "s/\S\+/\"&\",/g; s/,$//") ]"
+          formatted_doc_filenames="[ $(echo $doc_filenames | sed "s/\S\+/\"&\",/g; s/,$//") ]"
 
           base64_encoded_files=()
           while IFS= read -r filename; do
@@ -30,9 +30,9 @@ jobs:
           done <<< "$doc_filenames"
 
           # Format encoded_file_contents with quotes and commas
-          encoded_file_contents="$(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done)"
+          formatted_encoded_file_contents="$(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done)"
 
-          encoded_file_contents="[ $(echo $encoded_file_contents | sed 's/,$//') ]"
+          formatted_encoded_file_contents="[ $(echo $formatted_encoded_file_contents | sed 's/,$//') ]"
 
           curl -L \
               -X POST \
@@ -40,4 +40,4 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.PAT }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               https://api.github.com/repos/$repo_owner/$repo_name/dispatches \
-              -d "{\"event_type\": \"$event_type\", \"client_payload\": {\"service\": \"$service\", \"version\": \"$version\", \"unit\": false, \"integration\": true, \"doc_filenames\": $doc_filenames, \"encoded_file_contents\": $encoded_file_contents}}"
+              -d "{\"event_type\": \"$event_type\", \"client_payload\": {\"service\": \"$service\", \"version\": \"$version\", \"unit\": false, \"integration\": true, \"doc_filenames\": $formatted_doc_filenames, \"encoded_file_contents\": $formatted_encoded_file_contents}}"
