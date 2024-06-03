@@ -17,11 +17,11 @@ jobs:
           service="the-push-service"
           version="${{ github.event.release.tag_name }}"
 
-          # Collect all documentation files
-          doc_filenames=$(find doc/man1 doc/man7 -type f)
+          # Collect .adoc documentation files
+          doc_filenames=$(find doc/man1 -name '*.adoc' -type f; find doc/man7 -name '*.adoc' -type f)
 
-          # Format doc_filenames with single quotes and commas
-          formatted_doc_filenames="[ $(echo $doc_filenames | sed "s/\S\+/\"&\",/g; s/,$//") ]"
+          # Format doc_filenames with double quotes and commas
+          formatted_doc_filenames="[ $(echo $doc_filenames | sed 's/\S\+/\"&\",/g; s/,$//') ]"
 
           base64_encoded_files=()
           while IFS= read -r filename; do
@@ -30,9 +30,7 @@ jobs:
           done <<< "$doc_filenames"
 
           # Format encoded_file_contents with quotes and commas
-          formatted_encoded_file_contents="$(for elem in "${base64_encoded_files[@]}"; do echo "$elem,"; done)"
-
-          formatted_encoded_file_contents="[ $(echo $formatted_encoded_file_contents | sed 's/,$//') ]"
+          formatted_encoded_file_contents="[ $(IFS=,; echo "${base64_encoded_files[*]}") ]"
 
           curl -L \
               -X POST \
