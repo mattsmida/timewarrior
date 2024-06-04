@@ -1,6 +1,6 @@
 name: Trigger update docs workflow on ti.net repo
 on:
-  workflow-dispatch:
+  workflow_dispatch:
   release:
     types:
       - published
